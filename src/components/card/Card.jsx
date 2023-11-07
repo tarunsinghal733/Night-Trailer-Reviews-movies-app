@@ -2,9 +2,6 @@ import React, { useState } from 'react'
 import ReactStars from 'react-stars'
 import './Card.css'
 
-
-
-
 const Card = () => {
     const [Data, setData] = useState([
         {
@@ -36,14 +33,14 @@ const Card = () => {
 
     return (
         <div className='flex flex-wrap justify-between p-3 mt-3'>
-            {Data.map((element, index) => {
+            {Data.map((e, index) => {
                 return (
                     <div key={index} className='Cardbg text-lg font-medium p-2 rounded-md hover:-translate-y-3 cursor-pointer transition-all ease-in-out 1s mt-6'>
-                        <img className='h-72 w-64 rounded' src={element.img}></img>
-                        <h1><span className='card-heading'>Name: </span>{element.Name}</h1>
-                        <h1 className='flex items-center'><span className='card-heading pr-1'>Rating: </span><ReactStars count={5} size={24} value={element.Rating} half={true} edit={false}
+                        <img className='h-72 w-64 rounded' src={e.img}></img>
+                        <h1><span className='card-heading'>Name: </span>{e.Name}</h1>
+                        <h1 className='flex items-center'><span className='card-heading pr-1'>Rating: </span><ReactStars count={5} size={24} value={e.Rating} half={true} edit={false}
                             color2={'#ffd700'} /></h1>
-                        <h1><span className='card-heading'>Year: </span>{element.Year}</h1>
+                        <h1><span className='card-heading'>Year: </span>{e.Year}</h1>
                     </div>
                 );
             })}
