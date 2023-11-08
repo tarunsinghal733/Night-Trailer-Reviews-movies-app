@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TailSpin } from "react-loader-spinner";
-import { addDoc } from "firebase/firestore";
+import { addDoc } from "@firebase/firestore";
 import { moviesRef } from "../../firebase/firebase";
 import swal from 'sweetalert'
 

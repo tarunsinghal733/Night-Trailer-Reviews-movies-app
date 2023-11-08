@@ -1,32 +1,58 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactStars from 'react-stars'
+import { useParams } from 'react-router-dom'
+import { doc, getDoc} from '@firebase/firestore';
+import { db } from '../../firebase/firebase'
+import { ThreeCircles } from 'react-loader-spinner';
 import './Detailpage.css'
 
 const Detailpage = () => {
+    const { id } = useParams();
+    const [Data, setData] = useState({
+        title: "",
+        year: "",
+        image: "",
+        description: ""
+    })
+    
+    const [Loading, setLoading] = useState(false)
+    useEffect(() => {
+        async function getData() {
+          setLoading(true);
+          const _doc = doc(db, "movies", id);
+          const _data = await getDoc(_doc);
+          setData(_data.data());
+          setLoading(false);
+        }
+        getData();
+      },[])
+
+
     return (
         <div className='p-4 mt-4 flex flex-col md:flex-row w-full justify-center items-center md:items-start'>
-            <img className='h-96 block md:sticky top-24' src='https://cdn.bollywoodmdb.com/fit-in/movies/largethumb/2022/pathan/pathan-poster-10.jpg' />
-            <div className='ml-0 md:ml-4 w-full md:w-1/2'>
-                <h1 className='text-4xl font-bold mt-3 texthead'>Pathaan <span className='text-xl'>(2023)</span></h1>
-                <ReactStars className='mt-2'
-                    count={5}
-                    size={"24px"}
-                    value={5}
-                    half={true}
-                    edit={false}
-                    color2={'#ffd700'} 
-                />
-                <p className='mt-3'>Pathaan, an exiled RAW agent, works with ISI agent Rubina Mohsin to take down Jim, a
-                    former RAW agent, who plans to attack India with a deadly virus. Principal photography commenced in November
-                    2020 in Mumbai.“Pathaan” is in some ways a save-the-world superhero movie without suits, and while less
-                    self-serious, the hefty length can lag. More is not always better — though the gusto of Padukone speedskating
-                    to the rescue at one point goes a long way.
-                    
-                </p>
-            </div>
+            {Loading ? <div className='w-full flex items-center justify-center min-h-screen h-96'><ThreeCircles height={25} color='#ffd700' /></div> :
+                <>
+                    <img className='h-96 block md:sticky top-24' src={Data.image} />
+                    <div className='ml-0 md:ml-4 w-full md:w-1/2'>
+                        <h1 className='text-4xl font-bold mt-3 texthead'>{Data.title} <span className='text-xl' >({Data.year})</span></h1>
+                        <ReactStars className='mt-2'
+                            count={5}
+                            size={24}
+                            value={5}
+                            half={true}
+                            edit={false}
+                            color={'#ffd700'}
+                        />
+                        <p className='mt-3'>{Data.description}
+                        </p>
+                    </div>
+                </>
+            }
         </div>
 
     )
 }
 
 export default Detailpage
+
+

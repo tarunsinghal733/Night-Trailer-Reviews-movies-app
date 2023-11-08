@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import ReactStars from 'react-stars'
-import { getDocs } from 'firebase/firestore';
+import { getDoc } from '@firebase/firestore';
 import { moviesRef } from '../../firebase/firebase';
 import { InfinitySpin } from 'react-loader-spinner';
+import { Link } from 'react-router-dom';
 import './Card.css'
 
 const Card = () => {
@@ -12,9 +13,9 @@ const Card = () => {
     useEffect(() => {
         async function getData() {
             setLoading(true)
-            const _data = await getDocs(moviesRef)
+            const _data = await getDoc(moviesRef)
             _data.forEach((doc) => {
-setData((prv) => [...prv,{...(doc.data()),id: doc.id}])
+                setData((prv) => [...prv, { ...(doc.data()), id: doc.id }])
             })
             setLoading(false)
         }
@@ -27,14 +28,16 @@ setData((prv) => [...prv,{...(doc.data()),id: doc.id}])
                 height={40} color="white" /></div> :
                 Data.map((e, index) => {
                     return (
-                        <div key={index} className='Cardbg text-lg font-medium p-2 rounded-md mt-2 hover:-translate-y-3 cursor-pointer transition-all ease-in-out 1s mt-6'>
-                            <img className='mb-4 h-60 w-64 md:h-72 w-80 rounded' src={e.image}></img>
-                            <h1><span className='card-heading'>Name: </span>{e.title}</h1>
-                            <h1 className='flex items-center'><span className='card-heading pr-1'>Rating: </span>
-                            <ReactStars count={5} size={"20px"} value={5} half={true} edit={false}
-                                color2={'#ffd700'} /></h1>
-                            <h1><span className='card-heading'>Year: </span>{e.year}</h1>
-                        </div>
+                        <Link to={`/detail/${e.id}`}>
+                            <div key={index} className='Cardbg text-lg font-medium p-2 rounded-md mt-2 hover:-translate-y-3 cursor-pointer transition-all ease-in-out 1s mt-6'>
+                                <img className='mb-4 h-60 w-64 md:h-72 w-80 rounded' src={e.image}></img>
+                                <h1><span className='card-heading'>Name: </span>{e.title}</h1>
+                                <h1 className='flex items-center'><span className='card-heading pr-1'>Rating: </span>
+                                    <ReactStars count={5} size={"20px"} value={5} half={true} edit={false}
+                                        color2={'#ffd700'} /></h1>
+                                <h1><span className='card-heading'>Year: </span>{e.year}</h1>
+                            </div>
+                        </Link>
                     );
                 })
             }
