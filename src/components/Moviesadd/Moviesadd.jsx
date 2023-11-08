@@ -1,53 +1,128 @@
-import React, { useState } from 'react'
-import './Moviesadd.css'
+import React, { useState } from "react";
+import { TailSpin } from "react-loader-spinner";
+import { addDoc } from "firebase/firestore";
+import { moviesRef } from "../../firebase/firebase";
+import swal from 'sweetalert'
 
 
-const Moviesadd = () => {
+const AddMovie = () => {
+    const [form, setForm] = useState({
+        title: "",
+        year: "",
+        description: "",
+        image: ""
+    });
+    const [loading, setLoading] = useState(false);
 
-    const [Form, setForm] = useState([
-        {
-            Title: "",
-            Year: "",
-            Description: ""
-        },
-    ]);
+    const addMovie = async () => {
+        setLoading(true);
+        try {
+            await addDoc(moviesRef, form);
+            swal({
+                title: "Successfully Added",
+                icon: "success",
+                buttons: false,
+                timer: 3000
+            })
+            setForm({
+                title: "",
+                year: "",
+                description: "",
+                image: ""
+            })
+        }
+        catch (err) {
+            swal({
+                title: err,
+                icon: "error",
+                buttons: false,
+                timer: 3000
+            })
+        }
+        setLoading(false);
+    }
 
     return (
         <div>
-            <section class="formbg max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md mt-20">
-                <h2 class="text-3xl font-bold text-White-700 capitalize text-center mb-10">Add New movie</h2>
-
-                <form>
-                    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-                        <div>
-                            <label class="text-white-700 text-lg" for="username">Name</label>
-                            <input id="name" type="text" 
-                            value={Form.Title} 
-                            onChange={(e) => setForm({ ...Form, Title: e.target.value })} 
-                            class="inputbg block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300" />
-                        </div>
-
-                        <div>
-                            <label class="text-white-700 text-lg" for="emailAddress">Year</label>
-                            <input id="Year" type="string" value={Form.Year} onChange={(e) => setForm({ ...Form, Year: e.target.value })} class="inputbg block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300" />
-                        </div>
-
-                        <div>
-                            <label class="text-white-700 text-lg" for="password">Description</label>
-                            <textarea id="Description" type="text" value={Form.Description} onChange={(e) => setForm({ ...Form, Description: e.target.value })} class="inputbg block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300" />
+            <section className="text-gray-600 body-font relative">
+                <div className="container px-5 py-8 mx-auto">
+                    <div className="flex flex-col text-center w-full mb-4">
+                        <h1 className="sm:text-3xl text-xl font-medium title-font mb-4 text-white">
+                            Add Movie
+                        </h1>
+                    </div>
+                    <div className="lg:w-1/2 md:w-2/3 mx-auto">
+                        <div className="flex flex-wrap -m-2">
+                            <div className="p-2 w-1/2">
+                                <div className="relative">
+                                    <label className="leading-7 text-sm text-gray-300">
+                                        Title
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        value={form.title}
+                                        onChange={(e) => setForm({ ...form, title: e.target.value })}
+                                        className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                    />
+                                </div>
+                            </div>
+                            <div className="p-2 w-1/2">
+                                <div className="relative">
+                                    <label className="leading-7 text-sm text-gray-300">
+                                        Year
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        value={form.year}
+                                        onChange={(e) => setForm({ ...form, year: e.target.value })}
+                                        className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                    />
+                                </div>
+                            </div>
+                            <div className="p-2 w-full">
+                                <div className="relative">
+                                    <label className="leading-7 text-sm text-gray-300">
+                                        Image Link
+                                    </label>
+                                    <input
+                                        id="message"
+                                        name="message"
+                                        value={form.image}
+                                        onChange={(e) => setForm({ ...form, image: e.target.value })}
+                                        className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                    />
+                                </div>
+                            </div>
+                            <div className="p-2 w-full">
+                                <div className="relative">
+                                    <label className="leading-7 text-sm text-gray-300">
+                                        Description
+                                    </label>
+                                    <textarea
+                                        id="message"
+                                        name="message"
+                                        value={form.description}
+                                        onChange={(e) => setForm({ ...form, description: e.target.value })}
+                                        className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                                    ></textarea>
+                                </div>
+                            </div>
+                            <div className="p-2 w-full">
+                                <button onClick={addMovie} className="flex mx-auto text-white bg-green-600 border-0 py-2 px-8 focus:outline-none hover:bg-green-700 rounded text-lg">
+                                    {loading ? <TailSpin height={25} color="white" /> : 'Submit'}
+                                </button>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="flex justify-end mt-6">
-                        <button class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">Save</button>
-                    </div>
-                </form>
+                </div>
             </section>
 
-
-
         </div>
-    )
-}
+    );
+};
 
-export default Moviesadd
+export default AddMovie;
