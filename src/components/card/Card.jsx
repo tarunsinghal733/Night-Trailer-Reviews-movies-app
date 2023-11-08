@@ -14,7 +14,7 @@ const Card = () => {
             setLoading(true)
             const _data = await getDocs(moviesRef)
             _data.forEach((doc) => {
-setData((prv) => [...prv,doc.data()])
+setData((prv) => [...prv,{...(doc.data()),id: doc.id}])
             })
             setLoading(false)
         }
@@ -27,10 +27,11 @@ setData((prv) => [...prv,doc.data()])
                 height={40} color="white" /></div> :
                 Data.map((e, index) => {
                     return (
-                        <div key={index} className='md: w-40 h-96 Cardbg text-lg font-medium p-2 rounded-md hover:-translate-y-3 cursor-pointer transition-all ease-in-out 1s mt-6'>
-                            <img className='h-60 w-64 md:h-72 rounded' src={e.image}></img>
+                        <div key={index} className='Cardbg text-lg font-medium p-2 rounded-md mt-2 hover:-translate-y-3 cursor-pointer transition-all ease-in-out 1s mt-6'>
+                            <img className='mb-4 h-60 w-64 md:h-72 w-80 rounded' src={e.image}></img>
                             <h1><span className='card-heading'>Name: </span>{e.title}</h1>
-                            <h1 className='flex items-center'><span className='card-heading pr-1'>Rating: </span><ReactStars count={5} size={24} value={5} half={true} edit={false}
+                            <h1 className='flex items-center'><span className='card-heading pr-1'>Rating: </span>
+                            <ReactStars count={5} size={"20px"} value={5} half={true} edit={false}
                                 color2={'#ffd700'} /></h1>
                             <h1><span className='card-heading'>Year: </span>{e.year}</h1>
                         </div>
