@@ -13,7 +13,9 @@ const Detailpage = () => {
         title: "",
         year: "",
         image: "",
-        description: ""
+        description: "",
+        rating: 0,
+        rated:0
     })
     
     const [Loading, setLoading] = useState(false)
@@ -39,13 +41,13 @@ const Detailpage = () => {
                         <ReactStars className='mt-2'
                             count={5}
                             size={24}
-                            value={5}
+                            value={Data.rating/Data.rated}
                             half={true}
                             edit={false}
                             color={'#ffd700'}
                         />
                         <p className='mt-3'>{Data.description}
-                        <Review />
+                        <Review id={id} prevRating = {Data.rating} userRated={Data.rated}/>
                         </p>
                     </div>
                 </>

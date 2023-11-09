@@ -33,7 +33,7 @@ const Card = () => {
                                 <img className='mb-4 h-60 w-64 md:h-72 w-80 rounded' src={e.image}></img>
                                 <h1><span className='card-heading'>Name: </span>{e.title}</h1>
                                 <h1 className='flex items-center'><span className='card-heading pr-1'>Rating: </span>
-                                    <ReactStars count={5} size={"20px"} value={5} half={true} edit={false}
+                                    <ReactStars count={5} size={"20px"} value={e.rating/e.rated} half={true} edit={false}
                                         color2={'#ffd700'} /></h1>
                                 <h1><span className='card-heading'>Year: </span>{e.year}</h1>
                             </div>
