@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ReactStars from 'react-stars'
-import { getDoc } from '@firebase/firestore';
+import { getDocs } from '@firebase/firestore';
 import { moviesRef } from '../../firebase/firebase';
 import { InfinitySpin } from 'react-loader-spinner';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,7 @@ const Card = () => {
     useEffect(() => {
         async function getData() {
             setLoading(true)
-            const _data = await getDoc(moviesRef)
+            const _data = await getDocs(moviesRef)
             _data.forEach((doc) => {
                 setData((prv) => [...prv, { ...(doc.data()), id: doc.id }])
             })

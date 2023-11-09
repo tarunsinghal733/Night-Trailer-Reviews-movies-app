@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { doc, getDoc} from '@firebase/firestore';
 import { db } from '../../firebase/firebase'
 import { ThreeCircles } from 'react-loader-spinner';
+import Review from '../Review/Review';
 import './Detailpage.css'
 
 const Detailpage = () => {
@@ -44,6 +45,7 @@ const Detailpage = () => {
                             color={'#ffd700'}
                         />
                         <p className='mt-3'>{Data.description}
+                        <Review />
                         </p>
                     </div>
                 </>
