@@ -22,7 +22,6 @@ const Review = ({ id, prevRating, userRated }) => {
     const sendReview = async () => {
         setloading(true);
         try {
-           
                 await addDoc(reviewRef, {
                     movieid: id,
                     name: useAppstate.userName,

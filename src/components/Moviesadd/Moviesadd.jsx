@@ -24,7 +24,7 @@ const AddMovie = () => {
 
         setLoading(true);
         try {
-            if (useappstate.login) {
+          
                 await addDoc(moviesRef, form);
                 swal({
                     title: "Successfully Added",
@@ -38,9 +38,7 @@ const AddMovie = () => {
                     description: "",
                     image: ""
                 })
-            } else {
-                Navigate('/login')
-            }
+            
         }
         catch (err) {
             swal({
