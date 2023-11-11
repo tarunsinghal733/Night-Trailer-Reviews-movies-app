@@ -3,11 +3,16 @@ import { TailSpin } from 'react-loader-spinner'
 import { Link } from "react-router-dom"
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "@firebase/auth";
 import app from '../../firebase/firebase'
+import { usersRef } from '../../firebase/firebase';
+import { addDoc } from '@firebase/firestore'
+import { useNavigate } from 'react-router-dom';
+import bcrypt from "bcryptjs"
 import swal from 'sweetalert'
 import './Login.css'
 const auth = getAuth(app);
 
 const Signup = () => {
+  const navigate = useNavigate()
   const [form, setForm] = useState({
     name: "",
     mobile: "",
@@ -47,6 +52,39 @@ const Signup = () => {
       })
   }
 
+  const verifyOTP = () => {
+    try {
+      setLoading(true);
+      window.confirmationResult.confirm(OTP).then((result) => {
+        uploadData();
+        swal({
+          text: "Sucessfully Registered",
+          icon: "success",
+          buttons: false,
+          timer: 3000,
+        });
+        navigate('/login')
+        setLoading(false);
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const uploadData = async () => {
+    try {
+      const salt = bcrypt.genSaltSync(10);
+      var hash = bcrypt.hashSync(form.password, salt);
+      await addDoc(usersRef, {
+        name: form.name,
+        password: hash,
+        mobile: form.mobile
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
 
   return (
     <div className='w-full flex flex-col items-center mt-14'>
@@ -73,7 +111,7 @@ const Signup = () => {
             </div>
           </div>
           <div className="p-2 w-full mt-2">
-            <button  className="flex mx-auto text-white bg-green-600 border-0 py-2 px-8 focus:outline-none hover:bg-green-700 rounded text-lg">
+            <button onClick={verifyOTP} className="flex mx-auto text-white bg-green-600 border-0 py-2 px-8 focus:outline-none hover:bg-green-700 rounded text-lg">
               {Loading ? <TailSpin height={25} color="white" /> : 'Confirm Opt'}
             </button>
           </div>
@@ -119,7 +157,7 @@ const Signup = () => {
                 Password
               </label>
               <input
-                type="password"
+                type={'password'}
                 id="password"
                 placeholder='password'
                 name="email"
