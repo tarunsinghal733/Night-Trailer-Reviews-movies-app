@@ -1,42 +1,50 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import ReactStars from 'react-stars'
+import { useNavigate } from 'react-router-dom'
 import { reviewRef, db } from '../../firebase/firebase'
 import { addDoc, doc, updateDoc, query, where, getDocs } from '@firebase/firestore'
 import { TailSpin, ThreeDots } from 'react-loader-spinner'
+import { Appstate } from '../../App'
 import swal from 'sweetalert'
 import './Review.css'
 
 
 const Review = ({ id, prevRating, userRated }) => {
+    const useAppstate = useContext(Appstate)
+    const navigate = useNavigate()
     const [rating, setrating] = useState(0)
     const [loading, setloading] = useState(false)
     const [form, setform] = useState("")
     const [ReviewLoading, setReviewLoading] = useState(false)
     const [Data, setData] = useState([])
+    const [addNew, setaddNew] = useState(0)
 
     const sendReview = async () => {
         setloading(true);
         try {
-            await addDoc(reviewRef, {
-                movieid: id,
-                name: "tarun singhal",
-                rating: rating,
-                thought: form,
-                timestamp: new Date().getTime()
-            })
-            const ref = doc(db, "movies", id)
-            await updateDoc(ref, {
-                rating: prevRating + rating,
-                rated: userRated + 1
-            })
-            setrating(0)
-            setform("")
-            swal({
-                title: "Review Sent",
-                icon: "success",
-                buttons: false,
-                timer: 3000
-            })
+           
+                await addDoc(reviewRef, {
+                    movieid: id,
+                    name: useAppstate.userName,
+                    rating: rating,
+                    thought: form,
+                    timestamp: new Date().getTime()
+                })
+                const ref = doc(db, "movies", id)
+                await updateDoc(ref, {
+                    rating: prevRating + rating,
+                    rated: userRated + 1
+                })
+                setrating(0)
+                setform("")
+                setaddNew(addNew +1)
+                swal({
+                    title: "Review Sent",
+                    icon: "success",
+                    buttons: false,
+                    timer: 3000
+                })
+           
         } catch (error) {
             swal({
                 title: error.message,
@@ -60,7 +68,7 @@ const Review = ({ id, prevRating, userRated }) => {
             setReviewLoading(false)
         }
         getData()
-    }, [])
+    }, [addNew])
 
 
     return (
